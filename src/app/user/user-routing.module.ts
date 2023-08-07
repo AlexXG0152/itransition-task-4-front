@@ -1,0 +1,13 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { UserTableComponent } from './components/user-table/user-table.component';
+
+const routes: Routes = [
+  { path: 'userTable', component: UserTableComponent },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class UserRoutingModule {}

@@ -1,1 +1,42 @@
-<p>login works!</p>
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-6 mx-auto">
+      <h1 class="text-center mb-4">USER MANAGEMENT APPLICATION</h1>
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="{active: isLoginMode}" (click)="switchMode(true)">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="{active: !isLoginMode}" (click)="switchMode(false)">Registration</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="submitForm()">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" formControlName="username" class="form-control">
+            </div>
+            <div class="mb-3" *ngIf="!isLoginMode">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" formControlName="email" class="form-control">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" formControlName="password" class="form-control">
+            </div>
+            <div class="mb-3" *ngIf="!isLoginMode">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input type="password" formControlName="confirmPassword" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Enter' : 'Register' }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
