@@ -1,1 +1,14 @@
-<p>user-toolbar works!</p>
+<ul class="nav m-1">
+  <li class="nav-item">
+    <button type="button" class="btn btn-dark" (click)="onChangeStatus('blocked')">Block</button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="btn btn-success" (click)="onChangeStatus('active')">Unblock</button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="btn btn-danger" (click)="onChangeStatus('deleted')">Delete</button>
+  </li>
+  <li class="nav-item ms-auto">
+    <button type="button" class="btn btn-outline-dark" (click)="logout()">Log out</button>
+  </li>
+</ul>

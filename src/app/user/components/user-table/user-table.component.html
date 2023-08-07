@@ -1,31 +1,39 @@
-<ng-container *ngIf="users">
-
-<table class="table table-secondary table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">ID</th>
-      <th scope="col">Username</th>
-      <th scope="col">Email</th>
-      <th scope="col">Registration Date</th>
-      <th scope="col">Delete Date</th>
-      <th scope="col">Dtatus</th>
-      <th scope="col">CreatedAt</th>
-      <th scope="col">UpdatedAt</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users; let i = index">
-      <th scope="row">{{i + 1}}</th>
-      <td>{{user.id}}</td>
-      <td>{{user.username}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.registrationDate | date:'dd MMM yyyy HH:mm'}}</td>
-      <td>{{user.deleteDate | date:'dd MMM yyyy HH:mm'}}</td>
-      <td>{{user.status}}</td>
-      <td>{{user.createdAt | date:'dd MMM yyyy HH:mm'}}</td>
-      <td>{{user.updatedAt | date:'dd MMM yyyy HH:mm'}}</td>
-    </tr>
-  </tbody>
-</table>
+<ng-container *ngIf="users!.length > 0">
+  <app-user-toolbar></app-user-toolbar>
+  <table class="table table-secondary table-striped">
+    <thead>
+      <tr>
+        <th scope="col">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+            [checked]="isAllSelected"
+            (change)="selectAll($any($event.target).checked)">
+        </th>
+        <th scope="col">ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Registration Date</th>
+        <th scope="col">Delete Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">CreatedAt</th>
+        <th scope="col">UpdatedAt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <th scope="row">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+          [checked]="isAllSelected"
+          (change)="selectUser(user.id, $any($event.target)?.checked)">
+        </th>
+        <td>{{user.id}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.registrationDate | date:'dd MMM yyyy HH:mm'}}</td>
+        <td>{{user.deleteDate | date:'dd MMM yyyy HH:mm'}}</td>
+        <td>{{user.status}}</td>
+        <td>{{user.createdAt | date:'dd MMM yyyy HH:mm'}}</td>
+        <td>{{user.updatedAt | date:'dd MMM yyyy HH:mm'}}</td>
+      </tr>
+    </tbody>
+  </table>
 </ng-container>

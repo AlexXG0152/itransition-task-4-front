@@ -9,10 +9,11 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { Route, Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -31,6 +32,12 @@ export class AuthInterceptor implements HttpInterceptor {
           !request.url.includes('/api/auth/refreshtoken')
         ) {
           return this.handleUnauthorizedError(request, next);
+        } else if (
+          error.status === 403 &&
+          error.error.message === 'No token provided!'
+        ) {
+          this.router.navigate(['/login']);
+          return throwError(error);
         } else {
           return throwError(error);
         }
@@ -60,7 +67,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (newAccessToken) {
           this.authService.saveTokens(
             newAccessToken,
-            this.authService.getRefreshToken()
+            this.authService.getRefreshToken()!
           );
 
           request = this.addAuthorizationHeader(request, newAccessToken);
