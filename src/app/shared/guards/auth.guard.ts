@@ -1,5 +1,15 @@
+import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  return true;
-};
+export function authGuard(): CanActivateFn {
+  return () => {
+    const oauthService: AuthService = inject(AuthService);
+
+    // if (oauthService.hasAccess()) {
+    //   return true;
+    // }
+    // oauthService.login();
+    return false;
+  };
+}

@@ -7,5 +7,5 @@ export interface IUser {
   status: string;
   createdAt: string;
   updatedAt: string;
-  isSelected?: boolean;
+  lastLoginDate?: string;
 }

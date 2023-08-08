@@ -1,27 +1,21 @@
 # ItransitionTask4Front
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
+JavaScript/TypeScript+Angular+Node.js+Express+MySQL
+Create a working and deployed Web application with registration and authentication.
+Non-authenticated users should not have access to the user management (admin panel).
+Authenticated users should have access the user management table: id, name, e-mail, last login time, registration time, status (active/blocked).
+The leftmost column of the table should contains checkboxes without labels for multiple selection (table header contains only checkbox without label that selects or deselects all records).
+There must be a toolbar over the table with the flooring actions: Block (red button with text), Unblock (icon), Delete (icon).
+You have to use a CSS framework (Bootstrap is recommended, but you can choose any CSS framework).
+Every users should be able to block or delete yourself or any other user.
+If user account is blocked or deleted any next user’s request should redirect to the login page.
+User can use any non-empty password (even one character).
+Blocked user should not be able to login, deleted user can re-register.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

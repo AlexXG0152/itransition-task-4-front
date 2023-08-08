@@ -5,7 +5,7 @@ import { LoginComponent } from '../auth/components/login/login.component';
 
 const routes: Routes = [
   { path: 'userTable', component: UserTableComponent },
-  { path: '**', redirectTo: 'userTable' },
+  // { path: '**', redirectTo: 'userTable' },
 ];
 
 @NgModule({

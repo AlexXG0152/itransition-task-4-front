@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { TooltipPosition } from './shared/interfaces/tooltip.enum';
 
 @Component({
   selector: 'app-root',
