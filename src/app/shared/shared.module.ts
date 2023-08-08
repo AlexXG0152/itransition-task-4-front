@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserInfoComponent } from './components/user-info/user-info.component';
 import { ErrorService } from './services/error.service';
-import { httpInterceptorProviders } from './interceptors/http-request.interceptor';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { TooltipComponent } from './components/tooltip/tooltip.component';
+import { TooltipDirective } from './directives/tooltip.directive';
 
 @NgModule({
-  declarations: [UserInfoComponent],
-  providers: [httpInterceptorProviders],
+  declarations: [TooltipComponent, TooltipDirective],
   imports: [CommonModule],
-  exports: [ErrorService],
+  exports: [ErrorService, AuthInterceptor, TooltipDirective],
 })
 export class SharedModule {}

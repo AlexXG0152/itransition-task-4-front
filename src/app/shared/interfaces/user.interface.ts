@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: number;
   username: string;
   email: string;
@@ -7,4 +7,5 @@ export interface User {
   status: string;
   createdAt: string;
   updatedAt: string;
+  lastLoginDate?: string;
 }

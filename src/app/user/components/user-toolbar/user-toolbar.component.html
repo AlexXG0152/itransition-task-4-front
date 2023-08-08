@@ -1,1 +1,19 @@
-<p>user-toolbar works!</p>
+<ul class="nav mb-4 mt-0">
+  <li class="nav-item">
+    <button type="button" class="btn btn-outline-warning"
+      [tooltip]="selectedCheckboxValues.length>1 ? 'Block Users' : 'Block User'" [position]="position"
+      (click)="onChangeStatus('blocked')">
+      <i class="fa fa-lock"></i></button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="btn btn-outline-success"
+      [tooltip]="selectedCheckboxValues.length>1 ? 'Unblock Users' : 'Unblock User'" [position]="position"
+      (click)="onChangeStatus('active')"><i class="fa fa-lock-open"></i></button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="btn btn-danger"
+      [tooltip]="selectedCheckboxValues.length>1 ? 'Delete Users' : 'Delete User'" [position]="position"
+      (click)="onChangeStatus('deleted')"><i class="fa fa-trash"></i></button>
+  </li>
+
+</ul>

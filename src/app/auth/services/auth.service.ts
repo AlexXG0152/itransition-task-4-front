@@ -7,6 +7,8 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/services/error.service';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -14,23 +16,19 @@ import { ErrorService } from 'src/app/shared/services/error.service';
 export class AuthService {
   constructor(private http: HttpClient, private errorService: ErrorService) {}
 
-  AUTH_API = 'http://localhost:8080/api/auth';
+  AUTH_API = environment.AUTH_API
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  private accessToken?: string;
-  private refreshToken?: string;
-
-  login(username: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     return this.http
-      .post(`${this.AUTH_API}/signin`, { username, password }, this.httpOptions)
+      .post(`${this.AUTH_API}/signin`, { email, password }, this.httpOptions)
       .pipe(
         catchError(this.errorHandler.bind(this)),
         tap((res: any) => {
-          this.accessToken = res.accessToken;
-          this.refreshToken = res.refreshToken;
+          this.saveTokens(res.accessToken, res.refreshToken);
         })
       );
   }
@@ -53,30 +51,41 @@ export class AuthService {
       .post(`${this.AUTH_API}/signout`, {}, this.httpOptions)
       .pipe(
         catchError(this.errorHandler.bind(this)),
-        tap((res) => res)
+        tap((res) => this.clearTokens())
       );
   }
 
-  getToken(): string {
-    return this.accessToken!;
+  getToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
 
-  getRefreshToken(): string {
-    return this.refreshToken!;
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
   saveTokens(accessToken: string, refreshToken: string): void {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+  }
+
+  clearTokens(): void {
+    localStorage.setItem('accessToken', '');
+    localStorage.setItem('refreshToken', '');
   }
 
   refreshAccessToken(): Observable<any> {
     return this.http
-      .post<any>(`${this.AUTH_API}/refreshtoken`, this.refreshToken)
+      .post<any>(`${this.AUTH_API}/refreshtoken`, this.getRefreshToken())
       .pipe(
         catchError(this.errorHandler.bind(this)),
-        tap((res) => (this.accessToken = res.accessToken))
+        tap((res) => localStorage.setItem('accessToken', res.accessToken))
       );
+  }
+
+  checkAccessToken(): Observable<any> {
+    return this.http
+      .get<any>(`${this.AUTH_API}/checkaccesstoken`)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   private errorHandler(error: HttpErrorResponse) {

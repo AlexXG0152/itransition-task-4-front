@@ -9,10 +9,11 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { Route, Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -26,14 +27,27 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error) => {
-        if (
-          error.status === 401 &&
-          !request.url.includes('/api/auth/refreshtoken')
-        ) {
-          return this.handleUnauthorizedError(request, next);
-        } else {
-          return throwError(error);
+        switch (error.status) {
+          case 401:
+            if (!request.url.includes('/api/auth/refreshtoken')) {
+              return this.handleUnauthorizedError(request, next);
+            }
+            break;
+
+          case 403:
+            if (error.error.message === 'No token provided!') {
+              this.router.navigate(['/login']);
+            }
+            break;
+
+          case 400:
+            if (error.error.message === 'Sign in again!') {
+              this.router.navigate(['/login']);
+            }
+            break;
         }
+
+        return throwError(error);
       })
     );
   }
@@ -60,7 +74,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (newAccessToken) {
           this.authService.saveTokens(
             newAccessToken,
-            this.authService.getRefreshToken()
+            this.authService.getRefreshToken()!
           );
 
           request = this.addAuthorizationHeader(request, newAccessToken);

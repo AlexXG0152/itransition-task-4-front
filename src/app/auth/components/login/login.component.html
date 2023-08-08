@@ -14,26 +14,32 @@
           </ul>
         </div>
         <div class="card-body">
-          <form [formGroup]="form" (ngSubmit)="submitForm()">
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" formControlName="username" class="form-control">
-            </div>
+          <form [formGroup]="form" (ngSubmit)="submitForm()" class="needs-validation"
+            [class.was-validated]="isFormSubmitted" novalidate>
             <div class="mb-3" *ngIf="!isLoginMode">
               <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" formControlName="email" class="form-control">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" placeholder="Username" formControlName="username" class="form-control" required>
               </div>
             </div>
             <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" placeholder="Email" formControlName="email" class="form-control" required>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+            <div class="mb-3">
               <label for="password" class="form-label">Password</label>
-              <input type="password" formControlName="password" class="form-control">
+              <input type="password" placeholder="Password" formControlName="password" class="form-control" required>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
             <div class="mb-3" *ngIf="!isLoginMode">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <input type="password" formControlName="confirmPassword" class="form-control">
+              <input type="password" placeholder="Confirm Password" formControlName="confirmPassword"
+                class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Enter' : 'Register' }}</button>
+            <button type="submit" [disabled]="form.untouched" class="btn btn-primary">{{ isLoginMode ? 'Enter' : 'Register' }}</button>
           </form>
         </div>
       </div>

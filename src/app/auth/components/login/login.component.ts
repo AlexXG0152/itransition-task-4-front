@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   isLoginMode: boolean = true;
   form!: FormGroup;
+  isFormSubmitted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,17 +30,17 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.form = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(1)]],
+      username: ['', [this.emailValidator, Validators.minLength(1)]],
       email: [
         '',
-        [this.cellPhoneValidator, Validators.email, Validators.minLength(5)],
+        [Validators.required, Validators.email, Validators.minLength(5)],
       ],
       password: ['', [Validators.required, Validators.minLength(1)]],
       confirmPassword: ['', Validators.minLength(1)],
     });
   }
 
-  private readonly cellPhoneValidator: ValidatorFn = (c) => {
+  private readonly emailValidator: ValidatorFn = (c) => {
     return !this.isLoginMode
       ? Validators.required(c)
       : Validators.nullValidator(c);
@@ -47,10 +48,12 @@ export class LoginComponent implements OnInit {
 
   switchMode(loginMode: boolean): void {
     this.isLoginMode = loginMode;
+    this.isFormSubmitted = false;
     this.form.reset();
   }
 
   submitForm(): void {
+    this.isFormSubmitted = true;
     if (this.form.invalid) {
       return;
     }
@@ -60,7 +63,7 @@ export class LoginComponent implements OnInit {
     const password = this.form.value.password;
 
     if (this.isLoginMode) {
-      this.authService.login(username, password).subscribe((response) => {
+      this.authService.login(email, password).subscribe((response) => {
         const accessToken = response.accessToken;
         const refreshToken = response.refreshToken;
         this.authService.saveTokens(accessToken, refreshToken);
