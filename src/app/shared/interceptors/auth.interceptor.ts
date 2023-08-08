@@ -27,20 +27,27 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error) => {
-        if (
-          error.status === 401 &&
-          !request.url.includes('/api/auth/refreshtoken')
-        ) {
-          return this.handleUnauthorizedError(request, next);
-        } else if (
-          error.status === 403 &&
-          error.error.message === 'No token provided!'
-        ) {
-          this.router.navigate(['/login']);
-          return throwError(error);
-        } else {
-          return throwError(error);
+        switch (error.status) {
+          case 401:
+            if (!request.url.includes('/api/auth/refreshtoken')) {
+              return this.handleUnauthorizedError(request, next);
+            }
+            break;
+
+          case 403:
+            if (error.error.message === 'No token provided!') {
+              this.router.navigate(['/login']);
+            }
+            break;
+
+          case 400:
+            if (error.error.message === 'Sign in again!') {
+              this.router.navigate(['/login']);
+            }
+            break;
         }
+
+        return throwError(error);
       })
     );
   }

@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserTableComponent } from './components/user-table/user-table.component';
-import { LoginComponent } from '../auth/components/login/login.component';
+import { authGuard } from '../shared/guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'userTable', component: UserTableComponent },
-  // { path: '**', redirectTo: 'userTable' },
+  {
+    path: 'userTable',
+    component: UserTableComponent,
+    canActivate: [authGuard],
+  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'userTable' },
 ];
 
 @NgModule({

@@ -20,7 +20,7 @@
     <tbody>
       <tr *ngFor="let user of users; let i = index">
         <th scope="row">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [checked]="isAllSelected"
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [checked]="isSelected(user.id)"
             (change)="selectUser(user.id, $any($event.target)?.checked)">
         </th>
         <td>{{user.id}}</td>

@@ -20,12 +20,9 @@ export class AuthService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  // private accessToken?: string;
-  // private refreshToken?: string;
-
-  login(username: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     return this.http
-      .post(`${this.AUTH_API}/signin`, { username, password }, this.httpOptions)
+      .post(`${this.AUTH_API}/signin`, { email, password }, this.httpOptions)
       .pipe(
         catchError(this.errorHandler.bind(this)),
         tap((res: any) => {
@@ -62,7 +59,6 @@ export class AuthService {
 
   getRefreshToken(): string | null {
     return localStorage.getItem('refreshToken');
-    // return this.refreshToken!;
   }
 
   saveTokens(accessToken: string, refreshToken: string): void {
@@ -82,6 +78,12 @@ export class AuthService {
         catchError(this.errorHandler.bind(this)),
         tap((res) => localStorage.setItem('accessToken', res.accessToken))
       );
+  }
+
+  checkAccessToken(): Observable<any> {
+    return this.http
+      .get<any>(`${this.AUTH_API}/checkaccesstoken`)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   private errorHandler(error: HttpErrorResponse) {

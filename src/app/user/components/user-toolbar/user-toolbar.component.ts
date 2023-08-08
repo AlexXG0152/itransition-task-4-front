@@ -1,10 +1,10 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { CheckboxService } from '../../services/checkbox.service';
-import { Router } from '@angular/router';
-import { pipe } from 'rxjs/internal/util/pipe';
-import { AuthService } from '../../../auth/services/auth.service';
-import { TooltipPosition, TooltipTheme } from 'src/app/shared/interfaces/tooltip.enum';
+import {
+  TooltipPosition,
+  TooltipTheme,
+} from 'src/app/shared/interfaces/tooltip.enum';
 
 @Component({
   selector: 'app-user-toolbar',
@@ -14,9 +14,7 @@ import { TooltipPosition, TooltipTheme } from 'src/app/shared/interfaces/tooltip
 export class UserToolbarComponent {
   constructor(
     private userService: UserService,
-    private checkboxService: CheckboxService,
-    private authService: AuthService,
-    private router: Router
+    private checkboxService: CheckboxService
   ) {}
 
   position: TooltipPosition = TooltipPosition.BELOW;
@@ -26,10 +24,10 @@ export class UserToolbarComponent {
   top = 0;
   visible = false;
 
-  selectedCheckboxValues = this.checkboxService.selectedCheckboxValues || 0
+  selectedCheckboxValues = this.checkboxService.selectedCheckboxValues || 0;
 
   onChangeStatus(status: string) {
-    const selectedCheckboxes = this.checkboxService.selectedCheckboxValues;
+    let selectedCheckboxes = this.checkboxService.selectedCheckboxValues;
     const data: any[] = [];
 
     selectedCheckboxes.forEach((id) =>
@@ -38,14 +36,10 @@ export class UserToolbarComponent {
         status: status,
       })
     );
-    this.checkboxService.clearSelectedCheckboxes();
-
     this.userService.updateUser(data).subscribe(() => {
       this.userService.getAllUsers().subscribe((users) => {
         this.userService.passResults(users);
       });
     });
   }
-
-
 }
