@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { pipe } from 'rxjs';
+import { Subscription, pipe } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { TooltipPosition, TooltipTheme } from 'src/app/shared/interfaces/tooltip.enum';
+import {
+  TooltipPosition,
+  TooltipTheme,
+} from 'src/app/shared/interfaces/tooltip.enum';
 
 @Component({
   selector: 'app-logout',
@@ -19,7 +22,7 @@ export class LogoutComponent {
   top = 0;
   visible = false;
 
-  logout() {
+  logout(): Subscription {
     return this.authService
       .logout()
       .subscribe(pipe(() => this.router.navigate(['/login'])));

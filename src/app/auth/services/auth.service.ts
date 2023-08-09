@@ -8,7 +8,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { environment } from '../../../environments/environment';
-
+import { IUser } from 'src/app/shared/interfaces/user.interface';
+import { Tokens } from 'src/app/shared/interfaces/token.type';
 
 @Injectable({
   providedIn: 'root',
@@ -16,26 +17,30 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   constructor(private http: HttpClient, private errorService: ErrorService) {}
 
-  AUTH_API = environment.AUTH_API
+  AUTH_API = environment.AUTH_API;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<Tokens> {
     return this.http
-      .post(`${this.AUTH_API}/signin`, { email, password }, this.httpOptions)
+      .post<Tokens>(
+        `${this.AUTH_API}/signin`,
+        { email, password },
+        this.httpOptions
+      )
       .pipe(
         catchError(this.errorHandler.bind(this)),
-        tap((res: any) => {
+        tap((res: Tokens) => {
           this.saveTokens(res.accessToken, res.refreshToken);
         })
       );
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
+  register(username: string, email: string, password: string): Observable<IUser> {
     return this.http
-      .post(
+      .post<IUser>(
         `${this.AUTH_API}/signup`,
         { username, email, password },
         this.httpOptions
@@ -46,12 +51,12 @@ export class AuthService {
       );
   }
 
-  logout(): Observable<any> {
+  logout(): Observable<string> {
     return this.http
-      .post(`${this.AUTH_API}/signout`, {}, this.httpOptions)
+      .post<string>(`${this.AUTH_API}/signout`, {}, this.httpOptions)
       .pipe(
         catchError(this.errorHandler.bind(this)),
-        tap((res) => this.clearTokens())
+        tap(() => this.clearTokens())
       );
   }
 
@@ -73,18 +78,18 @@ export class AuthService {
     localStorage.setItem('refreshToken', '');
   }
 
-  refreshAccessToken(): Observable<any> {
+  refreshAccessToken(): Observable<Tokens> {
     return this.http
-      .post<any>(`${this.AUTH_API}/refreshtoken`, this.getRefreshToken())
+      .post<Tokens>(`${this.AUTH_API}/refreshtoken`, this.getRefreshToken())
       .pipe(
         catchError(this.errorHandler.bind(this)),
         tap((res) => localStorage.setItem('accessToken', res.accessToken))
       );
   }
 
-  checkAccessToken(): Observable<any> {
+  checkAccessToken(): Observable<Pick<Tokens, 'accessToken' >> {
     return this.http
-      .get<any>(`${this.AUTH_API}/checkaccesstoken`)
+      .get<Pick<Tokens, 'accessToken' >>(`${this.AUTH_API}/checkaccesstoken`)
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IUser } from '../interfaces/user.interface';
 
 const USER_KEY = 'user-';
 
@@ -12,12 +13,12 @@ export class StorageService {
     window.sessionStorage.clear();
   }
 
-  public saveUser(user: any): void {
+  public saveUser(user: IUser): void {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  public getUser(): any {
+  public getUser(): IUser | {} {
     const user = window.sessionStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);

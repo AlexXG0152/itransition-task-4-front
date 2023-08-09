@@ -18,7 +18,7 @@ export class UserTableComponent implements OnInit {
   isAllSelected = false;
 
   ngOnInit(): void {
-    this.checkboxService.selectedCheckboxValues = []
+    this.checkboxService.selectedCheckboxValues = [];
     this.isAllSelected = false;
     this.userService.getAllUsers().subscribe((res) => {
       this.userService.passResults(res);
@@ -52,7 +52,7 @@ export class UserTableComponent implements OnInit {
     }
   }
 
-  isSelected(id: number) {
+  isSelected(id: number): boolean {
     return this.checkboxService.selectedCheckboxValues.includes(id);
   }
 }

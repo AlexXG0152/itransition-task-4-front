@@ -25,13 +25,13 @@ export class UserService {
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 
-  updateUser(data: any) {
+  updateUser(data: Partial<IUser>): Observable<IUser> {
     return this.http
       .patch<IUser>(`${this.USERS_API}`, { data })
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 
-  deleteUser(id: string) {
+  deleteUser(id: string): Observable<IUser> {
     return this.http
       .delete<IUser>(`${this.USERS_API}/${id}`)
       .pipe(catchError(this.errorHandler.bind(this)));

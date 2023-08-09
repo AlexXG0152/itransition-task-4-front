@@ -4,20 +4,20 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class CheckboxService {
-  selectedCheckboxValues: any[] = [];
+  selectedCheckboxValues: number[] = [];
 
-  addSelectedCheckbox(checkboxValue: any) {
+  addSelectedCheckbox(checkboxValue: number): void {
     this.selectedCheckboxValues.push(checkboxValue);
   }
 
-  removeSelectedCheckbox(checkboxValue: any) {
+  removeSelectedCheckbox(checkboxValue: number): void {
     const index = this.selectedCheckboxValues.indexOf(checkboxValue);
     if (index !== -1) {
       this.selectedCheckboxValues.splice(index, 1);
     }
   }
 
-  clearSelectedCheckboxes() {
+  clearSelectedCheckboxes(): void {
     this.selectedCheckboxValues = [];
   }
 }

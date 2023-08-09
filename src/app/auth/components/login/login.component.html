@@ -19,7 +19,7 @@
             <div class="mb-3" *ngIf="!isLoginMode">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" placeholder="Username" formControlName="username" class="form-control" required>
+                <input type="text" placeholder="Username" formControlName="username" class="form-control" [attr.required]="!isLoginMode">
               </div>
             </div>
             <div class="mb-3">
@@ -37,7 +37,7 @@
             <div class="mb-3" *ngIf="!isLoginMode">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <input type="password" placeholder="Confirm Password" formControlName="confirmPassword"
-                class="form-control" required>
+                class="form-control" [attr.required]="!isLoginMode">
             </div>
             <button type="submit" [disabled]="form.untouched" class="btn btn-primary">{{ isLoginMode ? 'Enter' : 'Register' }}</button>
           </form>

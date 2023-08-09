@@ -10,15 +10,15 @@ export class ErrorService {
   constructor(private toaster: ToastrService) {}
   error$ = new Subject<string>();
 
-  handle(message: string) {
+  handle(message: string): void {
     this.error$.next(message);
   }
 
-  clear() {
+  clear(): void {
     this.error$.next('');
   }
 
-  handleError(err: HttpErrorResponse) {
+  handleError(err: HttpErrorResponse): void {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {
       errorMessage = `An error occurred: ${err.error.message}`;

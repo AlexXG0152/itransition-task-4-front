@@ -6,6 +6,7 @@ import {
   TooltipTheme,
 } from 'src/app/shared/interfaces/tooltip.enum';
 import { ToastrService } from 'ngx-toastr';
+import { IUser } from 'src/app/shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-user-toolbar',
@@ -28,7 +29,7 @@ export class UserToolbarComponent {
 
   selectedCheckboxValues = this.checkboxService.selectedCheckboxValues || 0;
 
-  onChangeStatus(status: string) {
+  onChangeStatus(status: string): void {
     let selectedCheckboxes = this.checkboxService.selectedCheckboxValues;
 
     if (selectedCheckboxes.length === 0) {
@@ -45,7 +46,7 @@ export class UserToolbarComponent {
       return;
     }
 
-    const data: any[] = [];
+    const data: Partial<IUser>[] = [];
 
     selectedCheckboxes.forEach((id) =>
       data.push({
@@ -54,7 +55,7 @@ export class UserToolbarComponent {
       })
     );
 
-    this.userService.updateUser(data).subscribe(() => {
+    this.userService.updateUser(data as Partial<IUser>).subscribe(() => {
       this.userService.getAllUsers().subscribe((users) => {
         this.userService.passResults(users);
       });

@@ -32,17 +32,14 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.form = this.formBuilder.group({
-      username: ['', [this.emailValidator, Validators.minLength(1)]],
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
+      username: ['', [this.usernameValidator, Validators.minLength(1)]],
+      email: ['', [Validators.required, Validators.email, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(1)]],
       confirmPassword: ['', Validators.minLength(1)],
     });
   }
 
-  private readonly emailValidator: ValidatorFn = (c) => {
+  private readonly usernameValidator: ValidatorFn = (c) => {
     return !this.isLoginMode
       ? Validators.required(c)
       : Validators.nullValidator(c);
@@ -81,7 +78,9 @@ export class LoginComponent implements OnInit {
 
       this.authService
         .register(username, email, password)
-        .subscribe(() => this.toastr.success('Please log in to the website', 'Success!'));
+        .subscribe(() =>
+          this.toastr.success('Please log in to the website', 'Success!')
+        );
     }
   }
 }
