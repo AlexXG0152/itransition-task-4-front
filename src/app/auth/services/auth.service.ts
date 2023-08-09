@@ -89,7 +89,8 @@ export class AuthService {
   }
 
   private errorHandler(error: HttpErrorResponse) {
-    this.errorService.handle(error.message);
+    // this.errorService.handle(error.message);
+    this.errorService.handleError(error);
     return throwError(() => error.message);
   }
 }

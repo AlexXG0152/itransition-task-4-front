@@ -5,6 +5,7 @@ import {
   TooltipPosition,
   TooltipTheme,
 } from 'src/app/shared/interfaces/tooltip.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-toolbar',
@@ -14,7 +15,8 @@ import {
 export class UserToolbarComponent {
   constructor(
     private userService: UserService,
-    private checkboxService: CheckboxService
+    private checkboxService: CheckboxService,
+    private toastr: ToastrService
   ) {}
 
   position: TooltipPosition = TooltipPosition.BELOW;
@@ -28,6 +30,21 @@ export class UserToolbarComponent {
 
   onChangeStatus(status: string) {
     let selectedCheckboxes = this.checkboxService.selectedCheckboxValues;
+
+    if (selectedCheckboxes.length === 0) {
+      this.toastr.warning(
+        `Please check some user to ${
+          status == 'blocked'
+            ? 'block'
+            : status == 'active'
+            ? 'unblock'
+            : 'delete'
+        }`,
+        'Warning'
+      );
+      return;
+    }
+
     const data: any[] = [];
 
     selectedCheckboxes.forEach((id) =>
@@ -36,6 +53,7 @@ export class UserToolbarComponent {
         status: status,
       })
     );
+
     this.userService.updateUser(data).subscribe(() => {
       this.userService.getAllUsers().subscribe((users) => {
         this.userService.passResults(users);

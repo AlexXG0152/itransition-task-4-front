@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -19,9 +20,10 @@ export class LoginComponent implements OnInit {
   isFormSubmitted: boolean = false;
 
   constructor(
+    private router: Router,
+    private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +81,7 @@ export class LoginComponent implements OnInit {
 
       this.authService
         .register(username, email, password)
-        .subscribe((data) => console.log(data));
+        .subscribe(() => this.toastr.success('Please log in to the website', 'Success!'));
     }
   }
 }
