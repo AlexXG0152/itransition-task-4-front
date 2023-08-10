@@ -38,7 +38,11 @@ export class AuthService {
       );
   }
 
-  register(username: string, email: string, password: string): Observable<IUser> {
+  register(
+    username: string,
+    email: string,
+    password: string
+  ): Observable<IUser> {
     return this.http
       .post<IUser>(
         `${this.AUTH_API}/signup`,
@@ -56,7 +60,9 @@ export class AuthService {
       .post<string>(`${this.AUTH_API}/signout`, {}, this.httpOptions)
       .pipe(
         catchError(this.errorHandler.bind(this)),
-        tap(() => this.clearTokens())
+        tap(() => {
+          this.clearTokens();
+        })
       );
   }
 
@@ -87,9 +93,9 @@ export class AuthService {
       );
   }
 
-  checkAccessToken(): Observable<Pick<Tokens, 'accessToken' >> {
+  checkAccessToken(): Observable<Pick<Tokens, 'accessToken'>> {
     return this.http
-      .get<Pick<Tokens, 'accessToken' >>(`${this.AUTH_API}/checkaccesstoken`)
+      .get<Pick<Tokens, 'accessToken'>>(`${this.AUTH_API}/checkaccesstoken`)
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 

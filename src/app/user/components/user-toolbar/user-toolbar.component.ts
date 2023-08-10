@@ -7,6 +7,9 @@ import {
 } from 'src/app/shared/interfaces/tooltip.enum';
 import { ToastrService } from 'ngx-toastr';
 import { IUser } from 'src/app/shared/interfaces/user.interface';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { pipe } from 'rxjs/internal/util/pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-toolbar',
@@ -15,7 +18,9 @@ import { IUser } from 'src/app/shared/interfaces/user.interface';
 })
 export class UserToolbarComponent {
   constructor(
+    private router: Router,
     private userService: UserService,
+    private authService: AuthService,
     private checkboxService: CheckboxService,
     private toastr: ToastrService
   ) {}
@@ -55,10 +60,18 @@ export class UserToolbarComponent {
       })
     );
 
-    this.userService.updateUser(data as Partial<IUser>).subscribe(() => {
-      this.userService.getAllUsers().subscribe((users) => {
-        this.userService.passResults(users);
+    this.userService
+      .updateUser(data as Partial<IUser>)
+      .subscribe((response) => {
+        if (response.message !== 'User was blocked') {
+          this.userService.getAllUsers().subscribe((users) => {
+            this.userService.passResults(users);
+          });
+        } else {
+          this.authService
+            .logout()
+            .subscribe(pipe(() => this.router.navigate(['/login'])));
+        }
       });
-    });
   }
 }

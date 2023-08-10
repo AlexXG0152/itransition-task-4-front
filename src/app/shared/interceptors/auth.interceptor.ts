@@ -29,6 +29,14 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error) => {
         switch (error.status) {
           case 401:
+            if (error.error.message === 'Sign in again!') {
+              // this.authService.logout();
+              // this.router.navigate(['/login']);
+              break
+            }
+            if (error.error.message  === 'Invalid Password!') {
+              break
+            }
             if (!request.url.includes('/api/auth/refreshtoken')) {
               return this.handleUnauthorizedError(request, next);
             }
@@ -81,11 +89,13 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(request);
         } else {
           this.authService.logout();
+          this.router.navigate(['/login'])
           return throwError('Unauthorized');
         }
       }),
       catchError((error) => {
         this.authService.logout();
+        this.router.navigate(['/login'])
         return throwError('Unauthorized');
       })
     );

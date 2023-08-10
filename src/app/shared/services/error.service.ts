@@ -25,7 +25,7 @@ export class ErrorService {
     } else {
       switch (err.status) {
         case 400:
-          errorMessage = `${err.status}: Bad Request.`;
+          errorMessage = `${err.status}: ${err.error.message}`;
           break;
         case 401:
           errorMessage = `${err.status}: You are unauthorized to do this action.`;
@@ -46,7 +46,8 @@ export class ErrorService {
           errorMessage = `${err.status}: The requested service is not available.`;
           break;
         default:
-          errorMessage = 'Something went wrong!';
+          errorMessage = `${err.status}: Something went wrong!`;
+          break
       }
     }
     this.toaster.error(errorMessage);

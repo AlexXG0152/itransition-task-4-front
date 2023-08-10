@@ -25,9 +25,9 @@ export class UserService {
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 
-  updateUser(data: Partial<IUser>): Observable<IUser> {
+  updateUser(data: Partial<IUser>): Observable<{message: string}> {
     return this.http
-      .patch<IUser>(`${this.USERS_API}`, { data })
+      .patch<{message: string}>(`${this.USERS_API}`, { data })
       .pipe(catchError(this.errorHandler.bind(this)));
   }
 
